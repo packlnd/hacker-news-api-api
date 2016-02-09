@@ -6,36 +6,40 @@ import re
 
 class API:
     def get_apis(self):
-        raw_json = self.get_from_github("hacker-news-api")
-        json = self.filter(raw_json)
-        return json
+        apis = []
+        page = 1
+        while True:
+            raw_json = self.get_from_github("hacker-news-api", page)
+            if not len(raw_json['items']):
+                break
+            page += 1
+            apis.extend(self.filter(raw_json))
+        return {'items':apis, 'count':len(apis)}
 
     def filter(self, j):
         filtered_json = []
-        print j['total_count']
-        print len(j['items'])
         for repo in j['items']:
             if self.is_api(repo):
                 item = {#'id':repo['id'],
-                        'name':repo['name'],
+                        'name':repo['name']}#,
                         #'full_name':repo['full_name'],
                         #'url':repo['html_url'],
-                        'desc':repo['description']}#,
+                        #'desc':repo['description'],
                         #'created':repo['created_at'],
                         #'stars':repo['stargazers_count'],
                         #'open_issues':repo['open_issues_count'],
                         #'score':repo['score']}
                 filtered_json.append(json.dumps(item))
-        print len(filtered_json)
         return filtered_json
 
-    def get_from_github(self, q):
+    def get_from_github(self, q, p):
         api_string = urllib2.urlopen("https://api.github.com/search/" +\
-                                     "repositories?" +\
-                                     "q=" + q + "&" +\
-                                     "sort=stars&" +\
-                                     "order=desc&" +\
-                                     "per_page=100").read()
+            "repositories?" +\
+            "q=" + q + "&" +\
+            "sort=stars&" +\
+            "order=desc&" +\
+            "page=" + str(p) + "&" +\
+            "per_page=100").read()
         return json.loads(api_string)
 
     def is_api(self, repo):
