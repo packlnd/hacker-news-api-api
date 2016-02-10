@@ -45,7 +45,12 @@ class API:
     def is_api(self, repo):
         # change to point-based feature system.
         words = [w.lower() for w in re.findall(r"[\w']+", repo['description'])]
+        print words
         return 'firebase' not in words and \
+               'app' not in words and \
+               'ios' not in words and \
+               'wrapper' not in words and \
+               'android' not in words and \
                'hacker' in words and \
                'news' in words and \
                'api' in words
