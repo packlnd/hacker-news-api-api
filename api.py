@@ -42,10 +42,23 @@ class API:
             "per_page=100").read()
         return json.loads(api_string)
 
+    def word_distance(self, words, word_list):
+        for w in word_list:
+            if not w in words:
+                return False
+        ind = {w:i for i,w in enumerate(words)}
+        dist = [abs(ind[w1]-ind[w2]) for w1 in word_list for w2 in word_list]
+        for d in dist:
+            if d > 3:
+                return False
+        return True
+
     def is_api(self, repo):
         # change to point-based feature system.
         words = [w.lower() for w in re.findall(r"[\w']+", repo['description'])]
-        print words
+        dist = self.word_distance(words, ['hacker','news','api'])
+        if not dist:
+            return False
         return 'firebase' not in words and \
                'app' not in words and \
                'ios' not in words and \
