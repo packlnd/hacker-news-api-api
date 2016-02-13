@@ -21,10 +21,10 @@ class API:
         for repo in j['items']:
             if self.is_api(repo):
                 item = {#'id':repo['id'],
+                        'desc':repo['description'],
                         'name':repo['name']}#,
                         #'full_name':repo['full_name'],
                         #'url':repo['html_url'],
-                        #'desc':repo['description'],
                         #'created':repo['created_at'],
                         #'stars':repo['stargazers_count'],
                         #'open_issues':repo['open_issues_count'],
