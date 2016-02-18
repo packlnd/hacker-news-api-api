@@ -14,21 +14,22 @@ class API:
                 break
             page += 1
             apis.extend(self.filter(raw_json))
-        return {'items':apis, 'count':len(apis)}
+        self.apis = {'items':apis, 'count':len(apis)}
+        return self.apis
 
     def filter(self, j):
         filtered_json = []
         for repo in j['items']:
             if self.is_api(repo):
-                item = {#'id':repo['id'],
+                item = {'id':repo['id'],
                         'desc':repo['description'],
-                        'name':repo['name']}#,
-                        #'full_name':repo['full_name'],
-                        #'url':repo['html_url'],
-                        #'created':repo['created_at'],
-                        #'stars':repo['stargazers_count'],
-                        #'open_issues':repo['open_issues_count'],
-                        #'score':repo['score']}
+                        'name':repo['name'],
+                        'full_name':repo['full_name'],
+                        'url':repo['html_url'],
+                        'created':repo['created_at'],
+                        'stars':repo['stargazers_count'],
+                        'open_issues':repo['open_issues_count'],
+                        'score':repo['score']}
                 filtered_json.append(json.dumps(item))
         return filtered_json
 
@@ -69,7 +70,12 @@ class API:
                'api' in words
 
     def get_endpoints(self, aid):
-        raise NotImplementedError
+        api = {}
+        for a in self.apis:
+            if a['id'] != aid:
+                next
+            api = a
+        # Find endpoints
 
     def get_statistics(self, aid):
         raise NotImplementedError
